@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\Listing;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -41,4 +42,16 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function favouriteListings()
+    {
+        return $this->morphedByMany(Listing::class, 'favouritable')
+        ->withPivot(['created_at'])
+        ->orderBy('Pivot_created_at', 'desc');
+    }
+
+    public function viewedListings()
+    {
+        return $this->belongsToMany(Listing::class, 'user_listing_views')->withTimestamps()->withPivot(['count', 'id']);
+    }
 }
