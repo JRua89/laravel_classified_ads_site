@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(AreaTableSeeder::class);
         $this->call(CategoryTableSeeder::class);
+        $this->call(ListingsTableSeeder::class);
         
         // \App\Models\User::factory(10)->create();
     }
